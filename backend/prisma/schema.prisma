@@ -4,10 +4,135 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id         Int      @id @default(autoincrement())
+  firstName  String
+  lastName   String
+  email      String   @unique
+  password   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  profile              Profile?
+  experiences          Experience[]
+  formations           Formation[]
+  langues              Langue[]
+  offres               Offre[]
+  documents            Document[]
+  userCompetences      UserCompetence[]
+}
+
+model Profile{ 
+  id Int @id @default(autoincrement())
+  user User @relation(fields:[userId], references:[id])
+  userId Int @unique 
+  professionalTitle String 
+  summary String 
+  contact String 
+  externalLinks String 
+  createdAt DateTime @default(now()) 
+  updatedAt DateTime @updatedAt 
+}
+
+model Experience {
+  id Int @id@default(autoincrement())
+  user User @relation( fields : [userId] , references : [id])
+  userId Int 
+  position String
+  company String
+  startDate DateTime
+  endDate DateTime
+  description String
+  order Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  experienceCompetences ExperienceCompetence[]
+}
+
+model Formation {
+  id Int @id@default(autoincrement())
+  user User @relation(fields : [userId] , references : [id])
+  userId Int 
+  institution String
+  degree String
+  specialty String
+  startDate DateTime
+  endDate DateTime
+  description String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Langue {
+  id Int @id@default(autoincrement())
+  user User @relation(fields : [userId] , references : [id])
+  userId Int 
+  name String
+  level String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Offre {
+  id Int @id@default(autoincrement())
+  user User @relation(fields : [userId] , references : [id])
+  userId Int
+  title String
+  company String
+  description String
+  createdAt DateTime @default(now()) 
+  updatedAt DateTime @updatedAt
+}
+
+model Document {
+  id Int @id@default(autoincrement())
+  user User @relation(fields : [userId] , references : [id])
+  userId Int
+  type String
+  content String
+  aiModelUsed String
+  createdAt DateTime @default(now()) 
+  updatedAt DateTime @updatedAt
+}
+
+model Competence {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  category  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userCompetences      UserCompetence[]
+  experienceCompetences ExperienceCompetence[]
+}
+
+
+model UserCompetence {
+  user         User       @relation(fields: [userId], references: [id])
+  userId       Int
+  competence   Competence @relation(fields: [competenceId], references: [id])
+  competenceId Int
+  level        String
+
+  @@id([userId, competenceId])
+}
+
+
+model ExperienceCompetence {
+  experience   Experience @relation(fields: [experienceId], references: [id])
+  experienceId Int
+  competence   Competence @relation(fields: [competenceId], references: [id])
+  competenceId Int
+
+  @@id([experienceId, competenceId])
 }
