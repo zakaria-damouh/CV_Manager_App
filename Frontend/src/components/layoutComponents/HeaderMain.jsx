@@ -14,9 +14,9 @@ export default function HeaderMain() {
 
         {/* Desktop Menu */}
         <nav className="hidden md:flex items-center gap-8 text-gray-600 font-medium">
-          <a href="#" className="hover:text-black">How it Works</a>
-          <a href="#" className="hover:text-black">Testimonials</a>
-          <a href="#" className="hover:text-black">Pricing</a>
+          <a href="#" className="hover:text-black">A propos</a>
+          <a href="#" className="hover:text-black">FAQ</a>
+          
         </nav>
 
         {/* Right side (desktop) */}
@@ -42,10 +42,8 @@ export default function HeaderMain() {
       {open && (
         <div className="md:hidden px-6 pb-4 space-y-3">
           <a href="#" className="block text-blue-600 font-medium">Features</a>
-          <a href="#" className="block">How it Works</a>
-          <a href="#" className="block">Testimonials</a>
-          <a href="#" className="block">Pricing</a>
-
+          <a href="#" className="block">A propos</a>
+          <a href="#" className="block">FAQ</a>
           <hr />
 
           <a href="#" className="block">Log In</a>

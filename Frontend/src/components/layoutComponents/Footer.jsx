@@ -15,13 +15,7 @@ export default function Footer() {
             l'intelligence artificielle et à la réflexion en design
             architectural.
           </p>
-
-          {/* Icons (simple) */}
-          <div className="flex gap-4 text-gray-500 text-lg">
-            <span>🌐</span>
-            <span>✉️</span>
-            <span>🔗</span>
-          </div>
+          
         </div>
 
         {/* Company */}
