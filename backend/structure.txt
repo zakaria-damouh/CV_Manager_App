@@ -1,0 +1,43 @@
+backend/
+├── src/
+│   ├── config/
+│   │   └── db.js              ← database connection (prisma)
+│   │
+│   ├── routes/
+│   │   ├── auth.routes.js
+│   │   ├── profile.routes.js
+│   │   ├── experience.routes.js
+│   │   ├── formation.routes.js
+│   │   ├── competence.routes.js
+│   │   ├── langue.routes.js
+│   │   ├── offre.routes.js
+│   │   └── cv.routes.js
+│   │
+│   ├── controllers/
+│   │   ├── auth.controller.js
+│   │   ├── profile.controller.js
+│   │   └── ...
+│   │
+│   ├── services/
+│   │   ├── auth.service.js
+│   │   ├── profile.service.js
+│   │   └── ...
+│   │
+│   ├── middlewares/
+│   │   ├── auth.middleware.js  ← JWT verification
+│   │   └── validate.middleware.js ← request validation
+│   │
+│   ├── validators/
+│   │   ├── auth.validator.js   ← Zod schemas
+│   │   └── ...
+│   │
+│   └── app.js                 ← express app setup
+│
+├── prisma/
+│   └── schema.prisma          ← your DB schema (you already have this)
+│
+├── .env
+├── .env.example
+├── .gitignore
+├── package.json
+└── Dockerfile
