@@ -33,7 +33,7 @@ model User {
 
 model Profile{ 
   id Int @id @default(autoincrement())
-  user User @relation(fields:[userId], references:[id])
+  user User @relation(fields:[userId], references:[id] ,onDelete: Cascade)
   userId Int @unique 
   professionalTitle String 
   summary String 
@@ -45,7 +45,7 @@ model Profile{
 
 model Experience {
   id Int @id@default(autoincrement())
-  user User @relation( fields : [userId] , references : [id])
+  user User @relation( fields : [userId] , references : [id] ,onDelete: Cascade)
   userId Int 
   position String
   company String
@@ -61,7 +61,7 @@ model Experience {
 
 model Formation {
   id Int @id@default(autoincrement())
-  user User @relation(fields : [userId] , references : [id])
+  user User @relation(fields : [userId] , references : [id] ,onDelete: Cascade)
   userId Int 
   institution String
   degree String
@@ -75,7 +75,7 @@ model Formation {
 
 model Langue {
   id Int @id@default(autoincrement())
-  user User @relation(fields : [userId] , references : [id])
+  user User @relation(fields : [userId] , references : [id] ,onDelete: Cascade)
   userId Int 
   name String
   level String
@@ -85,7 +85,7 @@ model Langue {
 
 model Offre {
   id Int @id@default(autoincrement())
-  user User @relation(fields : [userId] , references : [id])
+  user User @relation(fields : [userId] , references : [id] ,onDelete: Cascade)
   userId Int
   title String
   company String
@@ -96,7 +96,7 @@ model Offre {
 
 model Document {
   id Int @id@default(autoincrement())
-  user User @relation(fields : [userId] , references : [id])
+  user User @relation(fields : [userId] , references : [id] ,onDelete: Cascade)
   userId Int
   type String
   content String
@@ -118,9 +118,9 @@ model Competence {
 
 
 model UserCompetence {
-  user         User       @relation(fields: [userId], references: [id])
+  user         User       @relation(fields: [userId], references: [id] ,onDelete: Cascade)
   userId       Int
-  competence   Competence @relation(fields: [competenceId], references: [id])
+  competence   Competence @relation(fields: [competenceId], references: [id] , onDelete: Cascade)
   competenceId Int
   level        String
 
@@ -129,9 +129,9 @@ model UserCompetence {
 
 
 model ExperienceCompetence {
-  experience   Experience @relation(fields: [experienceId], references: [id])
+  experience   Experience @relation(fields: [experienceId], references: [id] , onDelete: Cascade)
   experienceId Int
-  competence   Competence @relation(fields: [competenceId], references: [id])
+  competence   Competence @relation(fields: [competenceId], references: [id] , onDelete: Cascade)
   competenceId Int
 
   @@id([experienceId, competenceId])

@@ -54,4 +54,37 @@ export const loginService = async (email, password) => {
     )
 
     return {token}
-}
+};
+
+
+export const updateAccountService = async (userId, firstName, lastName) => {
+    const existingUser = await prisma.user.findUnique({
+        where: { id: userId }
+    });
+
+    if (!existingUser) {
+        throw new Error('User not found');
+    }
+
+    const user = await prisma.user.update({
+        where: { id: userId },
+        data: { firstName, lastName },
+    });
+
+    const { password: _, ...userWithoutPassword } = user;
+    return userWithoutPassword;
+};
+
+
+
+export const deleteAccountService = async (userId) => {
+    const existingUser = await prisma.user.findUnique({
+        where: { id: userId }
+    });
+    if (!existingUser) {
+        throw new Error('User not found');
+    }
+    await prisma.user.delete({
+        where: { id: userId },
+    });
+};

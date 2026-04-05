@@ -4,11 +4,15 @@ import {body} from 'express-validator';
 export const registerValidator = [
     body('firstName')
         .notEmpty()
-        .withMessage('First Name is required'),
+        .withMessage('First name is required')
+        .isString()
+        .withMessage('First name must be a string'),
 
     body('lastName')
         .notEmpty()
-        .withMessage('Last name is required'),
+        .withMessage('Last name is required')
+        .isString()
+        .withMessage('Last name must be a string'),
 
     body('email')
         .isEmail()
@@ -33,4 +37,18 @@ export const loginValidator = [
   body('password')
     .notEmpty()
     .withMessage('Password is required'),
+];
+
+export const updateAccountValidator = [
+  body('firstName')
+    .notEmpty()
+    .withMessage('First name is required')
+    .isString()
+    .withMessage('First name must be a string'),
+
+  body('lastName')
+    .notEmpty()
+    .withMessage('Last name is required')
+    .isString()
+    .withMessage('Last name must be a string'),
 ];
