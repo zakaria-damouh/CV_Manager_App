@@ -6,10 +6,10 @@ import Roadmap from "@/components/homeComponents/Roadmap";
 
 function HomePage() {
   return (
-    <div>
+    <div >
       <HeroSection />
-      <AboutUs />
       <Roadmap />
+      <AboutUs />
     </div>
   );
 }
