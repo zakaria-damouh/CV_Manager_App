@@ -1,18 +1,22 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
-import HeaderMain from "./components/layoutComponents/HeaderMain"
-import Footer from "./components/layoutComponents/Footer"
-import HeroSection from "./components/homeComponents/HeroSection"
-import AboutUs from './components/homeComponents/AboutUs'
+import HomePage from './pages/HomePage'
+import SignupPage from './pages/SignupPage'
+import HeaderMain from './components/layoutComponents/HeaderMain'
+import Footer from './components/layoutComponents/Footer'
+
 
 function App() {
-
   return (
     <>
+    <BrowserRouter>
     <HeaderMain />
-    <HeroSection />
-    <AboutUs />
-    <Footer />
-    
+      <Routes>
+        <Route path='/' element={<HomePage />} />
+        <Route path='/signup' element={<SignupPage />} />
+      </Routes>
+      <Footer />
+    </BrowserRouter>
     </>
   )
 }

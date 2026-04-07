@@ -1,7 +1,7 @@
 import React from "react";
 
 
-export default function AboutAs() {
+function HeroSection() {
   return (
      <section className="w-full bg-gray-50 py-16">
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
@@ -44,13 +44,6 @@ export default function AboutAs() {
     </section>
   );
 }
+export default HeroSection;
 
 
-
-<div className="relative">
-        <img
-          src={"/images/img1Home.png"}
-          alt="Accueil"
-          className="w-full rounded-2xl shadow-lg"
-        />
-      </div>
