@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import { z } from "zod";
 
 const schema = z
@@ -87,6 +88,14 @@ function SignupForm() {
             S'inscrire
           </button>
         </form>
+        <p className="text-center text-sm text-gray-500 mt-4">
+          Utilisateur sur Mentor Pro ?{" "}
+          <Link to="/login">
+            <span className="text-blue-600 cursor-pointer">
+              Se connecter
+            </span>
+          </Link>
+        </p>
       </div>
     </section>
   );

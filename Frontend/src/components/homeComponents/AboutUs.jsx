@@ -7,11 +7,11 @@ export default function AboutUs() {
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Title */}
-        <div className="mb-12">
+        <div className="mb-12 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
             Des outils précis pour le candidat moderne.
           </h2>
-          <p className="text-gray-600 mt-3 max-w-xl">
+          <p className="text-gray-600  mt-3 ">
             Tout ce dont vous avez besoin pour surpasser la concurrence et décrocher votre premier emploi.
           </p>
         </div>

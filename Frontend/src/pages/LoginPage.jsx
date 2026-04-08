@@ -4,7 +4,6 @@ function LoginPage() {
   return (
 
        <LoginForm />
-
      );
 }   
 

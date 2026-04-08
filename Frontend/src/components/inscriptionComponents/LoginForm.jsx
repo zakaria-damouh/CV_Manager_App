@@ -82,18 +82,7 @@ export default function LoginSection() {
             Se connecter
           </button>
         </form>
-
-        {/* Divider */}
-        <div className="my-4 text-center text-gray-400 text-sm">
-          Ou continuer avec
-        </div>
-
-        {/* Social */}
-        <div className="flex gap-3">
-          <button className="w-1/2 border py-2 rounded">Google</button>
-          <button className="w-1/2 border py-2 rounded">LinkedIn</button>
-        </div>
-
+        
         {/* Register */}
         <p className="text-center text-sm text-gray-500 mt-4">
           Nouveau sur Mentor Pro ?{" "}
