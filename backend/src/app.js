@@ -9,6 +9,7 @@ import experienceRoutes from './routes/experience.routes.js';
 import formationRoutes from './routes/formation.routes.js';
 import competenceRoutes from './routes/competence.routes.js';
 import langueRoutes from './routes/langue.routes.js';
+import offreRoutes from './routes/offer.routes.js';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use('/api/experience', experienceRoutes);
 app.use('/api/formation', formationRoutes);
 app.use('/api/competence', competenceRoutes);
 app.use('/api/langues', langueRoutes);
+app.use('/api/offres', offreRoutes);
 
 const PORT = process.env.PORT || 5000;
 
