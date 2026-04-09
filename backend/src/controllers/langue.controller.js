@@ -4,7 +4,7 @@ import { createLangueService, deleteLangueService, getLangueByIdService, getLang
 export const getLangues = async (req, res) => {
 
     try {
-        const langues = await getLanguesService(req.user.id);
+        const langues = await getLanguesService(req.user.userId);
         res.json(langues);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -14,16 +14,23 @@ export const getLangues = async (req, res) => {
 export const getLangueById = async (req, res) => {
 
     try {
-        const langue = await getLangueByIdService(req.params.id);
+        const langueId = parseInt(req.params.id);
+        const langue = await getLangueByIdService(req.user.userId, langueId);
         res.json(langue);
     } catch (error) {
+        if (error.message === 'Langue not found') {
+            res.status(404).json({ error: error.message });
+        }
+        if (error.message === 'Unauthorized to access this langue') {
+            res.status(403).json({ error: error.message });
+        }
         res.status(500).json({ error: error.message });
     }
 }
 
 export const createLangue = async (req, res) => {
     try {
-        const langue = await createLangueService(req.body);
+        const langue = await createLangueService(req.user.userId, req.body);
         res.status(201).json(langue);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -32,7 +39,8 @@ export const createLangue = async (req, res) => {
 
 export const updateLangue = async (req, res) => {
     try {
-        const langue = await updateLangueService(req.user.id, req.params.id, req.body);
+        const langueId = parseInt(req.params.id);
+        const langue = await updateLangueService(req.user.userId, langueId, req.body);
         res.json(langue);
     } catch (error) {
         if (error.message === 'Langue not found') {
@@ -47,7 +55,8 @@ export const updateLangue = async (req, res) => {
 
 export const deleteLangue = async (req, res) => {
     try {
-        await deleteLangueService(req.user.id, req.params.id);
+        const langueId = parseInt(req.params.id);
+        await deleteLangueService(req.user.userId, langueId);
         res.json({ message: 'Langue deleted successfully' });
     } catch (error) {
         if (error.message === 'Langue not found') {

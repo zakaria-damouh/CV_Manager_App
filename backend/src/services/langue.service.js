@@ -8,19 +8,26 @@ export const getLanguesService = async (userId) => {
     return langues;
 }
 
-export const getLangueByIdService = async (langueId) => {
+export const getLangueByIdService = async (userId ,langueId) => {
     const langue = await prisma.langue.findUnique({
         where: { id: langueId }
     });
     if (!langue) {
         throw new Error('Langue not found');
     }
+
+    if (langue.userId !== userId) {
+        throw new Error('Unauthorized to access this langue');
+    }
     return langue;
 }
 
-export const createLangueService = async (data) => {
+export const createLangueService = async (userId, data) => {
     const langue = await prisma.langue.create({
-        data
+        data: {
+            userId,
+            ...data
+        }
     });
     return langue;
 }
@@ -59,5 +66,4 @@ export const deleteLangueService = async (userId, langueId) => {
     await prisma.langue.delete({
         where: { id: langueId }
     });
-    return;
 }

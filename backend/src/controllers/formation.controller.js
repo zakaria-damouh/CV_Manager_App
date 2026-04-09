@@ -6,14 +6,6 @@ export const getFormations = async (req, res) => {
     const formations = await getFormationsService(req.user.userId);
     res.status(200).json(formations);
   } catch (error) {
-    if (error.message === "Formations not found") {
-      return res.status(404).json({ message: error.message });
-    }
-
-    if (error.message === "Unauthorized") {
-      return res.status(403).json({ message: error.message });
-    }
-
     res.status(500).json({ message: error.message });
   }
 };
@@ -40,9 +32,6 @@ export const createFormation = async (req, res) => {
     const formation = await createFormationService(req.user.userId, req.body);
     res.status(201).json({ message: "Formation created successfully", formation });
   } catch (error) {
-    if (error.message === "User not found") {
-      return res.status(404).json({ message: error.message });
-    }
     res.status(500).json({ message: error.message });
   }
 };

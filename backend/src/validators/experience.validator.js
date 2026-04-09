@@ -20,4 +20,9 @@ export const experienceValidator = [
     body('description')
         .notEmpty()
         .withMessage('Description is required'),
+    body('order')
+        .notEmpty()
+        .withMessage('Order is required')
+        .isInt()
+        .withMessage('Order must be a number'),
 ] 

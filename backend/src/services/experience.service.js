@@ -6,14 +6,6 @@ export const getExperiencesService = async (userId) => {
         where: { userId }
     });
 
-    if (!experiences) {
-        throw new Error('Experiences not found');
-    }
-
-    if (experiences.userId !== userId) {
-        throw new Error('Unauthorized');
-    }
-
     return experiences;
 };
 
@@ -37,13 +29,6 @@ export const getExperienceByIdService = async (experienceId, userId) => {
 
 
 export const createExperienceService = async (userId, data) => {
-    const user = await prisma.user.findUnique({
-        where: { id: userId }
-    });
-    if (!user) {
-        throw new Error('User not found');
-    }
-    
     const experience = await prisma.experience.create({
         data: {
             userId,

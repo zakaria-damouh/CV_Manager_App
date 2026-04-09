@@ -1,17 +1,22 @@
 import prisma from "../config/db.js";
 
 
-export const getOffresService = async () => {
-    const offres = await prisma.offre.findMany();
+export const getOffresService = async (userId) => {
+    const offres = await prisma.offre.findMany({
+        where: { userId: userId }
+    });
     return offres;
 }
 
-export const getOffreByIdService = async (offreId) => {
+export const getOffreByIdService = async (userId, offreId) => {
     const offre = await prisma.offre.findUnique({
         where: { id: offreId }
     });
     if (!offre) {
         throw new Error('Offre not found');
+    }
+    if (offre.userId !== userId) {
+        throw new Error('Unauthorized to access this offre');
     }
     return offre;
 }
@@ -26,23 +31,6 @@ export const createOffreService = async (userId, data) => {
     return offre;
 }
 
-export const updateOffreService = async (userId, offreId, data) => {
-    const existingOffre = await prisma.offre.findUnique({
-        where: { id: offreId }
-    });
-    if (!existingOffre) {
-        throw new Error('Offre not found');
-    }
-    if (existingOffre.userId !== userId) {
-        throw new Error('Unauthorized to update this offre');
-    }
-
-    const updatedOffre = await prisma.offre.update({
-        where: { id: offreId },
-        data
-    });
-    return updatedOffre;
-}
 
 export const deleteOffreService = async (userId, offreId) => {
     const existingOffre = await prisma.offre.findUnique({
