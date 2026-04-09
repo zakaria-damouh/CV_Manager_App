@@ -1,4 +1,5 @@
 import prisma from '../config/db.js';
+import groq from '../config/groq.js';
 import openai from '../config/openai.js';
 
 // helper function to collect all user data from DB
@@ -18,6 +19,44 @@ const collectUserData = async (userId) => {
 };
 
 // helper function to build the prompt based on document type
+// const buildPrompt = (type, userData, jobOffer = null) => {
+//   const { profile, experiences, formations, competences, langues } = userData;
+
+//   const baseInfo = `
+//     Profile: ${profile?.professionalTitle} - ${profile?.summary}
+//     Contact: ${profile?.contact}
+//     External Links: ${profile?.externalLinks}
+
+//     Experiences:
+//     ${experiences.map(e => `- ${e.position} at ${e.company} (${e.startDate} - ${e.endDate}): ${e.description}`).join('\n')}
+
+//     Formations:
+//     ${formations.map(f => `- ${f.degree} in ${f.specialty} at ${f.institution} (${f.startDate} - ${f.endDate})`).join('\n')}
+
+//     Competences:
+//     ${competences.map(c => `- ${c.competence.name} (${c.level})`).join('\n')}
+
+//     Languages:
+//     ${langues.map(l => `- ${l.name} (${l.level})`).join('\n')}
+//   `;
+
+//   const prompts = {
+//     // CV: `Generate a professional CV in markdown format based on this profile:\n${baseInfo}`,
+//     CV: `Generate a professional CV in markdown format based on this profile. Do not add any notes, disclaimers, or comments at the end:\n${baseInfo}`,
+    
+//     cover_letter: `Generate a professional cover letter in markdown format based on this profile:\n${baseInfo}
+//     ${jobOffer ? `\nJob Offer:\nTitle: ${jobOffer.title}\nCompany: ${jobOffer.company}\nDescription: ${jobOffer.description}` : ''}`,
+    
+//     profile_summary: `Generate a short professional profile summary (max 150 words) based on this profile:\n${baseInfo}`,
+    
+//     application_email: `Generate a professional job application email based on this profile:\n${baseInfo}
+//     ${jobOffer ? `\nJob Offer:\nTitle: ${jobOffer.title}\nCompany: ${jobOffer.company}\nDescription: ${jobOffer.description}` : ''}`
+//   };
+
+//   return prompts[type];
+// };
+
+
 const buildPrompt = (type, userData, jobOffer = null) => {
   const { profile, experiences, formations, competences, langues } = userData;
 
@@ -39,16 +78,82 @@ const buildPrompt = (type, userData, jobOffer = null) => {
     ${langues.map(l => `- ${l.name} (${l.level})`).join('\n')}
   `;
 
+  const jsonInstruction = `
+    Respond ONLY with a valid JSON object. No markdown, no explanation, no backticks.
+  `;
+
   const prompts = {
-    CV: `Generate a professional CV in markdown format based on this profile:\n${baseInfo}`,
-    
-    cover_letter: `Generate a professional cover letter in markdown format based on this profile:\n${baseInfo}
-    ${jobOffer ? `\nJob Offer:\nTitle: ${jobOffer.title}\nCompany: ${jobOffer.company}\nDescription: ${jobOffer.description}` : ''}`,
-    
-    profile_summary: `Generate a short professional profile summary (max 150 words) based on this profile:\n${baseInfo}`,
-    
-    application_email: `Generate a professional job application email based on this profile:\n${baseInfo}
-    ${jobOffer ? `\nJob Offer:\nTitle: ${jobOffer.title}\nCompany: ${jobOffer.company}\nDescription: ${jobOffer.description}` : ''}`
+    CV: `${jsonInstruction}
+    Generate a CV as JSON from this profile:${baseInfo}
+    Return this exact structure:
+    {
+      "name": "",
+      "title": "",
+      "summary": "",
+      "contact": {
+        "phone": "",
+        "email": "",
+        "github": "",
+        "linkedin": "",
+        "location": ""
+      },
+      "experiences": [
+        {
+          "role": "",
+          "company": "",
+          "startDate": "",
+          "endDate": "",
+          "description": ""
+        }
+      ],
+      "formations": [
+        {
+          "degree": "",
+          "specialty": "",
+          "institution": "",
+          "startDate": "",
+          "endDate": ""
+        }
+      ],
+      "competences": [""],
+      "languages": [
+        { "name": "", "level": "" }
+      ]
+    }`,
+
+    cover_letter: `${jsonInstruction}
+    Generate a cover letter as JSON from this profile:${baseInfo}
+    ${jobOffer ? `Job Offer: ${jobOffer.title} at ${jobOffer.company} - ${jobOffer.description}` : ''}
+    Return this exact structure:
+    {
+      "recipient": "",
+      "company": "",
+      "subject": "",
+      "opening": "",
+      "body": "",
+      "closing": ""
+    }`,
+
+    profile_summary: `${jsonInstruction}
+    Generate a profile summary as JSON from this profile:${baseInfo}
+    Return this exact structure:
+    {
+      "headline": "",
+      "summary": "",
+      "keyStrengths": [""]
+    }`,
+
+    application_email: `${jsonInstruction}
+    Generate a job application email as JSON from this profile:${baseInfo}
+    ${jobOffer ? `Job Offer: ${jobOffer.title} at ${jobOffer.company} - ${jobOffer.description}` : ''}
+    Return this exact structure:
+    {
+      "subject": "",
+      "greeting": "",
+      "body": "",
+      "closing": "",
+      "signature": ""
+    }`
   };
 
   return prompts[type];
@@ -79,33 +184,62 @@ export const generateDocumentService = async (userId, type, offreId = null) => {
   const prompt = buildPrompt(type, userData, jobOffer);
 
   // 4 - call OpenAI
-  const response = await openai.chat.completions.create({
-    model: 'gpt-4o-mini',
+//   const response = await openai.chat.completions.create({
+//     model: 'gpt-4o-mini',
+//     messages: [
+//       {
+//         role: 'system',
+//         content: 'You are a professional career coach and CV writer. Generate high quality professional documents.'
+//       },
+//       {
+//         role: 'user',
+//         content: prompt
+//       }
+//     ],
+//     max_tokens: 2000,
+//   });
+
+      const response = await groq.chat.completions.create({
+    model: 'llama-3.3-70b-versatile',
     messages: [
       {
         role: 'system',
-        content: 'You are a professional career coach and CV writer. Generate high quality professional documents.'
+        content: 'You are a professional CV writer. Always respond with valid JSON only. No markdown, no backticks, no explanation.'
       },
-      {
-        role: 'user',
-        content: prompt
-      }
+      { role: 'user', content: prompt }
     ],
     max_tokens: 2000,
   });
 
-  const content = response.choices[0].message.content;
+  // 5 - parse and validate JSON
+  let content;
+  try {
+    const raw = response.choices[0].message.content;
+    const cleaned = raw.replace(/```json|```/g, '').trim(); // strip backticks if model misbehaves
+    content = JSON.stringify(JSON.parse(cleaned));          // validate + normalize
+  } catch (err) {
+    throw new Error('AI returned invalid JSON. Please try again.');
+  }
 
-  // 5 - save document to DB
+  // 6 - save to DB
   const document = await prisma.document.create({
-    data: {
-      userId,
-      type,
-      content,
-      aiModelUsed: 'gpt-4o-mini'
-    }
+    data: { userId, type, content, aiModelUsed: 'llama-3.3-70b-versatile' }
   });
 
+//   const content = response.choices[0].message.content;
+
+  // 5 - save document to DB
+//   const document = await prisma.document.create({
+//     data: {
+//       userId,
+//       type,
+//       content,
+    //   aiModelUsed: 'gpt-4o-mini'
+    //   aiModelUsed: 'llama-3.3-70b-versatile'
+    // }
+//   });
+
+ 
   return document;
 };
 
