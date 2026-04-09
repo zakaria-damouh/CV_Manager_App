@@ -47,5 +47,4 @@ export const deleteOffreService = async (userId, offreId) => {
     await prisma.offre.delete({
         where: { id: offreId }
     });
-    return;
 }

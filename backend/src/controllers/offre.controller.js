@@ -1,4 +1,4 @@
-import { createOffreService, deleteOffreService, getOffreByIdService, getOffresService, updateOffreService } from "../services/offre.service.js";
+import { createOffreService, deleteOffreService, getOffreByIdService, getOffresService } from "../services/offre.service.js";
 
 
 export const getOffers = async (req, res) => {
