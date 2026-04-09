@@ -7,8 +7,7 @@ import {
   FaGraduationCap,
   FaTools,
   FaLanguage,
-  FaFileAlt,
-  FaCog,
+    FaFileAlt,
   FaSuitcaseRolling,
 } from "react-icons/fa";
 
@@ -70,14 +69,9 @@ function Sidebar() {
           <FaFileAlt />
           <span>Documents IA</span>
         </NavLink>
-
-        <NavLink to="/dashboard/settings" className={linkClass}>
-          <FaCog />
-          <span>Paramètres</span>
-        </NavLink>
       </nav>
     </aside>
-  );
+  );      
 }
 
 export default Sidebar;

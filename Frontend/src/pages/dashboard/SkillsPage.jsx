@@ -1,4 +1,4 @@
-import SkillForm from '@/components/profilFormComponents/SkillForm'
+import SkillForm from '@/components/profilFormComponents/Competence'
 import react from 'react'
 
 
