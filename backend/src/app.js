@@ -22,9 +22,9 @@ app.use(express.json());
 
 app.use('/api/auth/' , authRoutes);
 app.use('/api/profile', profileRoutes);
-app.use('/api/experience', experienceRoutes);
-app.use('/api/formation', formationRoutes);
-app.use('/api/competence', competenceRoutes);
+app.use('/api/experiences', experienceRoutes);
+app.use('/api/formations', formationRoutes);
+app.use('/api/competences', competenceRoutes);
 app.use('/api/langues', langueRoutes);
 app.use('/api/offres', offreRoutes);
 app.use('/api/documents', documentRoutes);
