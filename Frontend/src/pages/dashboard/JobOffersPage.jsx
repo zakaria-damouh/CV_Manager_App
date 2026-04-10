@@ -3,7 +3,7 @@
 import OffersForm from "@/components/profilFormComponents/JobOfferForm";
 import React from "react";
 
-function OffersPage() {
+function OffreForm() {
   return (
     <div>
         <OffersForm />
@@ -11,4 +11,4 @@ function OffersPage() {
   );
 }
 
-export default OffersPage;
+export default OffreForm;

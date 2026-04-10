@@ -1,3 +1,4 @@
+import axiosClient from "@/api/axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -26,9 +27,14 @@ function SignupForm() {
     resolver: zodResolver(schema),  
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
-  };
+  const onSubmit = async (data) => {
+  try {
+    const res = await axiosClient.post("/auth/register", data);
+    console.log("Signup success:", res.data);
+  } catch (err) {
+    console.log("Error:", err.response?.data);
+  }
+};
 
   return (
     <section className="w-full min-h-screen flex items-center justify-center bg-gray-100">

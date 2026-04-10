@@ -2,54 +2,37 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FaLanguage } from "react-icons/fa";
+import { FaTools } from "react-icons/fa";
 import axiosClient from "../../api/axios";
 
-const langueSchema = z.object({
-  name: z.string().min(1, "La langue est requise"),
-  level: z.string().min(1, "Le niveau est requis"),
+const competenceSchema = z.object({
+  name: z
+    .string()
+    .min(2, "Le nom de la compétence est requis"),
+
+  category: z
+    .string()
+    .min(2, "La catégorie est requise"),
 });
 
-const languagesList = [
-  "Français",
-  "Anglais",
-  "Arabe",
-  "Espagnol",
-  "Allemand",
-  "Italien",
-  "Portugais",
-  "Chinois",
-  "Japonais",
-  "Coréen",
-];
-
-const levels = [
-  "Débutant (A1-A2)",
-  "Intermédiaire (B1-B2)",
-  "Avancé (C1)",
-  "Courant (C2)",
-  "Bilingue",
-  "Langue maternelle",
-];
-
-function LangueForm() {
+function CompetenceForm() {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
   } = useForm({
-    resolver: zodResolver(langueSchema),
+    resolver: zodResolver(competenceSchema),
     defaultValues: {
       name: "",
-      level: "",
+      category: "",
     },
   });
 
   const onSubmit = async (data) => {
     try {
-      const res = await axiosClient.post("/langues", data);
-      console.log("Langue saved:", res.data);
+      const res = await axiosClient.post("/competences", data);
+      console.log("Competence saved:", res.data);
       reset();
     } catch (error) {
       console.error("Erreur:", error);
@@ -61,39 +44,34 @@ function LangueForm() {
       <div className="max-w-3xl mx-auto px-4">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Gestion des Langues
+            Gestion des Compétences
           </h1>
           <p className="text-gray-600 text-lg">
-            Ajoutez les langues que vous maîtrisez.
+            Ajoutez vos compétences pour enrichir votre profil.
           </p>
         </div>
 
         <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-              <FaLanguage className="text-blue-600 text-lg" />
+              <FaTools className="text-blue-600 text-lg" />
             </div>
             <h2 className="text-2xl font-bold text-gray-900">
-              Nouvelle langue
+              Nouvelle compétence
             </h2>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
               <label className="block text-sm font-semibold uppercase text-gray-700 mb-2">
-                Langue
+                Nom de la compétence
               </label>
-              <select
+              <input
+                type="text"
+                placeholder="ex: AutoCAD"
                 className="w-full rounded-md border border-gray-200 bg-gray-50 px-4 py-3 outline-none focus:border-blue-500"
                 {...register("name")}
-              >
-                <option value="">-- Sélectionnez une langue --</option>
-                {languagesList.map((langue) => (
-                  <option key={langue} value={langue}>
-                    {langue}
-                  </option>
-                ))}
-              </select>
+              />
               {errors.name && (
                 <p className="text-red-500 text-sm mt-1">
                   {errors.name.message}
@@ -103,22 +81,17 @@ function LangueForm() {
 
             <div>
               <label className="block text-sm font-semibold uppercase text-gray-700 mb-2">
-                Niveau
+                Catégorie
               </label>
-              <select
+              <input
+                type="text"
+                placeholder="ex: Logiciel / Technique / Soft Skill"
                 className="w-full rounded-md border border-gray-200 bg-gray-50 px-4 py-3 outline-none focus:border-blue-500"
-                {...register("level")}
-              >
-                <option value="">-- Sélectionnez un niveau --</option>
-                {levels.map((lvl) => (
-                  <option key={lvl} value={lvl}>
-                    {lvl}
-                  </option>
-                ))}
-              </select>
-              {errors.level && (
+                {...register("category")}
+              />
+              {errors.category && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.level.message}
+                  {errors.category.message}
                 </p>
               )}
             </div>
@@ -139,4 +112,4 @@ function LangueForm() {
   );
 }
 
-export default LangueForm;
+export default CompetenceForm;

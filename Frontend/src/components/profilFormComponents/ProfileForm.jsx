@@ -3,16 +3,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaBriefcase } from "react-icons/fa";
+import axiosClient from "../../api/axios";
 
 const profileSchema = z.object({
-  firstName: z
-    .string()
-    .min(2, "Le prénom doit contenir au moins 2 caractères"),
-
-  lastName: z
-    .string()
-    .min(2, "Le nom doit contenir au moins 2 caractères"),
-
   professionalTitle: z
     .string()
     .min(3, "Le titre professionnel est requis"),
@@ -33,12 +26,11 @@ function ProfileForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    reset,
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
       professionalTitle: "",
       contact: "",
       summary: "",
@@ -46,8 +38,14 @@ function ProfileForm() {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log("Profile data:", data);
+  const onSubmit = async (data) => {
+    try {
+      const res = await axiosClient.post("/profile", data);
+      console.log("Profile saved:", res.data);
+      reset();
+    } catch (error) {
+      console.error("Erreur:", error);
+    }
   };
 
   return (
@@ -74,42 +72,6 @@ function ProfileForm() {
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold uppercase text-gray-700 mb-2">
-                  Prénom
-                </label>
-                <input
-                  type="text"
-                  placeholder="ex: Alexandre"
-                  className="w-full rounded-md border border-gray-200 bg-gray-50 px-4 py-3 outline-none focus:border-blue-500"
-                  {...register("firstName")}
-                />
-                {errors.firstName && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.firstName.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold uppercase text-gray-700 mb-2">
-                  Nom
-                </label>
-                <input
-                  type="text"
-                  placeholder="ex: Martin"
-                  className="w-full rounded-md border border-gray-200 bg-gray-50 px-4 py-3 outline-none focus:border-blue-500"
-                  {...register("lastName")}
-                />
-                {errors.lastName && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.lastName.message}
-                  </p>
-                )}
-              </div>
-            </div>
-
             <div>
               <label className="block text-sm font-semibold uppercase text-gray-700 mb-2">
                 Titre professionnel
@@ -181,8 +143,10 @@ function ProfileForm() {
             <div className="pt-2">
               <button
                 type="submit"
-                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
-                Enregistrer
+                disabled={isSubmitting}
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+              >
+                {isSubmitting ? "Enregistrement..." : "Enregistrer"}
               </button>
             </div>
           </form>

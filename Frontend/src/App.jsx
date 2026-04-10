@@ -15,8 +15,9 @@ import ProfilePage from './pages/dashboard/Profilepage'
 import ExperiencePage from "./pages/dashboard/ExperiencePage";
 import LanguagesPage from "./pages/dashboard/LanguagesPage";
 import FormationPage from "./pages/dashboard/FormationPage";
-import SkillsPage from "./pages/dashboard/SkillsPage";
 import OffersPage from "./pages/dashboard/JobOffersPage";
+import DocumentPage from "./pages/dashboard/Documentpage";
+import SkillsPage from "./pages/dashboard/SkillsPage";
 
 
 function App() {
@@ -33,14 +34,14 @@ function App() {
 
          {/* Dashboard pages */}
         <Route path='/dashboard' element={<DashboardLayout />}>
+        <Route index element={<ProfilePage />} />
           <Route path='profile' element={<ProfilePage />} />
           <Route path="experiences" element={<ExperiencePage />} />
           <Route path="languages" element={<LanguagesPage />} />
           <Route path="formations" element={<FormationPage />} />
           <Route path="skills" element={<SkillsPage />} />
           <Route path="offers" element={<OffersPage />} />
-
-       
+          <Route path="documents" element={<DocumentPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

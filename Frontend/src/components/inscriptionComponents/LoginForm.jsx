@@ -2,7 +2,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axiosClient from "@/api/axios"; 
 
 // Zod schema for validation
 const schema = z.object({
@@ -11,6 +12,7 @@ const schema = z.object({
 });
 
 export default function LoginSection() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -18,10 +20,20 @@ export default function LoginSection() {
   } = useForm({
     resolver: zodResolver(schema),
   });
+  
+  
+const onSubmit = async (data) => {
+  try {
+    const res = await axiosClient.post("/auth/login", data);
 
-  const onSubmit = (data) => {
-    console.log("Login data:", data);
-  };
+    localStorage.setItem("token", res.data.token);
+    navigate("/dashboard/profile");
+
+    console.log("Connexion réussie");
+  } catch (err) {
+    console.log(err.response?.data);
+  }
+};
 
   return (
     <section className="w-full min-h-screen flex items-center justify-center bg-gray-100">
