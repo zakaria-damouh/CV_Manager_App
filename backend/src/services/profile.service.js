@@ -26,6 +26,8 @@ export const getUserService = async (userId) => {
     where: { id: userId },
     select: {
       id: true,
+      firstName: true,
+      lastName: true,
       email: true,
       createdAt: true,
       profile: true,

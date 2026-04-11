@@ -5,7 +5,6 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -14,113 +13,131 @@ import {
   HiOutlineLink,
   HiOutlineCalendar,
   HiOutlinePencil,
+  HiOutlinePhone,
 } from "react-icons/hi";
 import ProfileForm from "@/components/profilFormComponents/ProfileForm";
 
-function ProfileCard({ profile, onSubmitProfile, loading }) {
-  if (!profile) return null;
+function ProfileCard({ user, profile, loading }) {
+  if (!profile || !user) return null;
 
-  // 🎯 icon style واحد
-  const iconClass = "text-gray-500";
-  const iconSize = 18;
+
 
   return (
-    <Card className="rounded-2xl shadow-sm border border-gray-100">
-      <CardContent className="p-6 space-y-6">
-        
-        {/* Header */}
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">
-              {profile.professionalTitle?.charAt(0).toUpperCase()}
-            </div>
+<Card className="rounded-2xl  border  h-full flex flex-col">
+  <CardContent className="p-6 flex flex-col h-full">
 
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900">
-                {profile.professionalTitle}
-              </h2>
+    {/* 🔝 HEADER */}
+    <div className="flex items-start justify-between">
+      <div className="flex items-center gap-4">
 
-              <Badge variant="secondary" className="mt-1">
-                User ID: {profile.userId}
-              </Badge>
-            </div>
-          </div>
-
-          {/* Dialog */}
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button
-                variant="outline"
-                className="rounded-xl flex items-center gap-2"
-              >
-                <HiOutlinePencil size={18} className="text-gray-600" />
-                Edit
-              </Button>
-            </DialogTrigger>
-
-            <DialogContent className="!max-w-5xl   ">
-              <DialogHeader>
-              </DialogHeader>
-
-              <ProfileForm
-                initialData={profile}
-                onSubmitProfile={onSubmitProfile}
-                loading={loading}
-              />
-            </DialogContent>
-          </Dialog>
+        {/* Avatar */}
+        <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl">
+          {user.firstName?.charAt(0).toUpperCase()}
         </div>
 
-        {/* Contact */}
-        <div className="flex items-center gap-3 text-gray-600">
-          <HiOutlineMail size={iconSize} className={iconClass} />
-          <span>{profile.contact}</span>
-        </div>
-
-        {/* Summary */}
+        {/* Name + Title */}
         <div>
-          <h3 className="text-sm font-semibold text-gray-700 uppercase mb-2">
-            Bio
-          </h3>
-          <p className="text-gray-600 leading-relaxed">
-            {profile.summary}
+          <h2 className="text-xl font-semibold text-gray-900">
+            {user.firstName} {user.lastName}
+          </h2>
+          <p className="text-sm text-gray-500">
+            {profile.professionalTitle}
           </p>
         </div>
+      </div>
 
-        {/* External Links */}
-        {profile.externalLinks && (
-          <div className="flex items-center gap-3 text-blue-600 break-all">
-            <HiOutlineLink size={iconSize} className="text-blue-500" />
-            <a
-              href={profile.externalLinks}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:underline"
-            >
-              {profile.externalLinks}
-            </a>
-          </div>
-        )}
+      {/* Edit */}
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="ghost" size="icon" className="rounded-full">
+            <HiOutlinePencil size={18} className="text-gray-600" />
+          </Button>
+        </DialogTrigger>
 
-        {/* Dates */}
-        <div className="flex flex-col gap-1 text-xs text-gray-500 pt-4 border-t">
-          <div className="flex items-center gap-2">
-            <HiOutlineCalendar size={14} className={iconClass} />
-            <span>
-              Créé le: {new Date(profile.createdAt).toLocaleDateString()}
-            </span>
-          </div>
+        <DialogContent className="!max-w-5xl">
+          <DialogHeader />
+          <ProfileForm
+            initialData={profile}
+          />
+        </DialogContent>
+      </Dialog>
+    </div>
 
-          <div className="flex items-center gap-2">
-            <HiOutlineCalendar size={14} className={iconClass} />
-            <span>
-              Mis à jour: {new Date(profile.updatedAt).toLocaleDateString()}
-            </span>
-          </div>
+    {/* 🪪 BADGE */}
+    <div className="mt-4">
+      <Badge variant="secondary">User ID: {profile.userId}</Badge>
+    </div>
+
+    {/* 📩 CONTACT INFO */}
+    <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-600">
+
+      <div className="flex items-center gap-2">
+        <HiOutlineMail size={16} />
+        <span className="truncate">{user.email}</span>
+      </div>
+
+      {profile.contact && (
+        <div className="flex items-center gap-2">
+          <HiOutlinePhone size={16} />
+          <span>{profile.contact}</span>
         </div>
+      )}
 
-      </CardContent>
-    </Card>
+      {profile.externalLinks && (
+        <div className="flex items-center gap-2 col-span-full text-blue-600">
+          <HiOutlineLink size={16} />
+          <a
+            href={
+              profile.externalLinks.startsWith("http")
+                ? profile.externalLinks
+                : `https://${profile.externalLinks}`
+            }
+            target="_blank"
+            rel="noopener noreferrer"
+            className="truncate hover:underline"
+          >
+            {profile.externalLinks}
+          </a>
+        </div>
+      )}
+    </div>
+
+    {/* 🧠 BIO */}
+    <div className="mt-6 flex-1">
+      <h3 className="text-xs font-semibold text-gray-400 uppercase mb-2">
+        Bio
+      </h3>
+      <p className="text-sm text-gray-600 leading-relaxed line-clamp-4">
+        {profile.summary}
+      </p>
+    </div>
+
+    {/* 📅 FOOTER */}
+    <div className="mt-6 pt-4 border-t text-xs text-gray-500 space-y-1">
+      <div className="flex items-center gap-2">
+        <HiOutlineCalendar size={14} />
+        <span>
+          Account: {new Date(user.createdAt).toLocaleDateString()}
+        </span>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <HiOutlineCalendar size={14} />
+        <span>
+          Profile: {new Date(profile.createdAt).toLocaleDateString()}
+        </span>
+      </div>
+
+      <div className="flex items-center gap-2">
+        <HiOutlineCalendar size={14} />
+        <span>
+          Updated: {new Date(profile.updatedAt).toLocaleDateString()}
+        </span>
+      </div>
+    </div>
+
+  </CardContent>
+</Card>
   );
 }
 
