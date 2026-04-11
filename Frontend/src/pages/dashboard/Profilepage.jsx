@@ -1,4 +1,4 @@
-import ProfileSection from "@/components/clientComponents/ProfileSection";
+import ProfileSection from "@/components/clientComponents/Profile/ProfileSection";
 import ProfileForm from "@/components/profilFormComponents/ProfileForm";
 
 
