@@ -1,10 +1,12 @@
+import ProfileSection from "@/components/clientComponents/ProfileSection";
 import ProfileForm from "@/components/profilFormComponents/ProfileForm";
 
 
 function ProfilePage() {
   return (
     <>
-    <ProfileForm />
+    <ProfileSection />
+    {/* <ProfileForm /> */}
     </>
   )
 }
