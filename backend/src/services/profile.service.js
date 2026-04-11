@@ -21,6 +21,34 @@ export const createProfileService = async (userId, data) => {
   return profile;
 };
 
+export const getUserService = async (userId) => {
+    const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      email: true,
+      createdAt: true,
+      profile: true,
+      experiences: {
+        include: {
+          experienceCompetences: {
+            include: { competence: true }
+          }
+        }
+      },
+      formations: true,
+      langues: true,
+      userCompetences: {
+        include: { competence: true }
+      },
+    }
+  });
+
+  if (!user) throw new Error('User not found');
+
+  return user;
+};
+
 export const getProfileService = async (userId) => {
 
   const profile = await prisma.profile.findUnique({

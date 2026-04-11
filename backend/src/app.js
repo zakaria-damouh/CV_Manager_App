@@ -12,6 +12,8 @@ import langueRoutes from './routes/langue.routes.js';
 import offreRoutes from './routes/offer.routes.js';
 import documentRoutes from './routes/document.routes.js';
 import aiRoutes from './routes/ai.routes.js';
+import userCompetenceRoutes from './routes/userCompetence.routes.js';
+import experienceCompetenceRouter from './routes/experienceCompetence.routes.js';
 
 dotenv.config();
 
@@ -30,6 +32,9 @@ app.use('/api/langues', langueRoutes);
 app.use('/api/offres', offreRoutes);
 app.use('/api/documents', documentRoutes);
 app.use('/api/ai', aiRoutes);
+
+app.use('/api/user-competences', userCompetenceRoutes);
+app.use('/api/experiences/:experienceId/competences', experienceCompetenceRouter);
 
 const PORT = process.env.PORT || 5000;
 

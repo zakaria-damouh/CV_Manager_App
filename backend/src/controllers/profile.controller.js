@@ -1,4 +1,4 @@
-import { createProfileService, getProfileService, updateProfileService } from "../services/profile.service.js";
+import { createProfileService, getProfileService, getUserService, updateProfileService } from "../services/profile.service.js";
 
 export const createProfile = async (req, res) => {
   try {
@@ -6,6 +6,15 @@ export const createProfile = async (req, res) => {
     res.status(201).json({ message: 'Profile created successfully', profile });
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+};
+
+export const getUser = async (req, res) => {
+  try {
+    const user = await getUserService(req.user.userId);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
   }
 };
 

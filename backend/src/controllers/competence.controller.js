@@ -3,7 +3,7 @@ import { createCompetenceService, deleteCompetenceService, getCompetenceByIdServ
 
 export const getCompetences = async (req, res) => {
     try {
-        const competences = await getCompetencesService(req.user.id); 
+        const competences = await getCompetencesService(req.user.userId); 
         res.json(competences);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -17,7 +17,7 @@ export const getCompetenceById = async (req, res) => {
         res.json(competence);
     } catch (error) {
         if (error.message === 'Competence not found') {
-            res.status(404).json({ error: error.message });
+            return res.status(404).json({ error: error.message });
         }
 
         res.status(500).json({ error: error.message });
@@ -26,7 +26,7 @@ export const getCompetenceById = async (req, res) => {
 
 export const createCompetence = async (req, res) => {
     try {
-        const competence = await createCompetenceService(req.user.id, req.body);
+        const competence = await createCompetenceService(req.user.userId, req.body);
         res.status(201).json(competence);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -36,14 +36,14 @@ export const createCompetence = async (req, res) => {
 export const updateCompetence = async (req, res) => {
     try {
          const competenceId = parseInt(req.params.id);
-        const competence = await updateCompetenceService(competenceId, req.user.id, req.body); 
+        const competence = await updateCompetenceService(competenceId, req.user.userId, req.body); 
         res.json(competence);
     } catch (error) {
         if (error.message === 'Competence not found') {
-            res.status(404).json({ error: error.message });
+           return res.status(404).json({ error: error.message });
         } 
         if (error.message === 'Unauthorized') {
-            res.status(403).json({ error: error.message });
+            return res.status(403).json({ error: error.message });
         }
         res.status(500).json({ error: error.message });
     }
@@ -53,7 +53,7 @@ export const updateCompetence = async (req, res) => {
 export const deleteCompetence = async (req, res) => {
     try {
         const competenceId = parseInt(req.params.id);
-        await deleteCompetenceService(competenceId, req.user.id);
+        await deleteCompetenceService(competenceId, req.user.userId);
         res.json({ message: 'Competence deleted successfully' });
     } catch (error) {
         if (error.message === 'Competence not found') {
