@@ -22,7 +22,6 @@ import SkillsPage from "./pages/dashboard/SkillsPage";
 
 function App() {
   return (
-    <>
     <BrowserRouter>
       <Routes>
         {/* Public pages */}
@@ -36,16 +35,15 @@ function App() {
         <Route path='/dashboard' element={<DashboardLayout />}>
         <Route index element={<ProfilePage />} />
           <Route path='profile' element={<ProfilePage />} />
-          <Route path="experiences" element={<ExperiencePage />} />
+          {/* <Route path="experiences" element={<ExperiencePage />} />
           <Route path="languages" element={<LanguagesPage />} />
           <Route path="formations" element={<FormationPage />} />
-          <Route path="skills" element={<SkillsPage />} />
+          <Route path="skills" element={<SkillsPage />} /> */}
           <Route path="offers" element={<OffersPage />} />
           <Route path="documents" element={<DocumentPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
-    </>
   )
 }
 

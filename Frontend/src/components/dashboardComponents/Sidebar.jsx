@@ -30,35 +30,12 @@ function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-2">
-        <NavLink to="/dashboard" end className={linkClass}>
-          <FaHome />
-          <span>Tableau de bord</span>
-        </NavLink>
 
         <NavLink to="/dashboard/profile" className={linkClass}>
           <FaUser />
           <span>Mon profil</span>
         </NavLink>
 
-        <NavLink to="/dashboard/experiences" className={linkClass}>
-          <FaBriefcase />
-          <span>Expériences</span>
-        </NavLink>
-
-        <NavLink to="/dashboard/formations" className={linkClass}>
-          <FaGraduationCap />
-          <span>Formations</span>
-        </NavLink>
-
-        <NavLink to="/dashboard/skills" className={linkClass}>
-          <FaTools />
-          <span>Compétences</span>
-        </NavLink>
-
-        <NavLink to="/dashboard/languages" className={linkClass}>
-          <FaLanguage />
-          <span>Langues</span>
-        </NavLink>
 
         <NavLink to="/dashboard/offers" className={linkClass}>
           <FaSuitcaseRolling />

@@ -52,7 +52,7 @@ function OffrePage() {
 
   return (
     <section className="w-full bg-gray-100 py-12">
-      <div className="mx-auto max-w-5xl px-4">
+      <div className="mx-auto max-w-full px-4">
         <div className="mb-8 flex items-center justify-between gap-4">
           <div>
             <h1 className="mb-2 text-4xl font-bold text-gray-900">
