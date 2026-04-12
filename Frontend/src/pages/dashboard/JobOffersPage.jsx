@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axiosClient from "@/api/axios";
 import OffreCard from "@/components/clientComponents/Offres/OffreCard";
 import OffersForm from "@/components/profilFormComponents/JobOfferForm";
+import { FaBriefcase, FaPlusCircle } from "react-icons/fa";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -28,7 +29,7 @@ function OffrePage() {
       setError("");
 
       const res = await axiosClient.get("/offres");
-      setOffres(Array.isArray(res.data) ? res.data : []);
+      setOffres(res.data);
     } catch (err) {
       console.error("Erreur lors du chargement des offres :", err);
       setError("Impossible de charger les offres");
@@ -38,15 +39,12 @@ function OffrePage() {
   }
 
   async function handleDelete(offre) {
-    const confirmed = window.confirm(
-      `Voulez-vous vraiment supprimer l'offre "${offre.title}" ?`
-    );
-
-    if (!confirmed) return;
-
     try {
       await axiosClient.delete(`/offres/${offre.id}`);
-      setOffres((prev) => prev.filter((item) => item.id !== offre.id));
+
+      setOffres((prev) =>
+        prev.filter((item) => item.id !== offre.id)
+      );
     } catch (error) {
       console.error("Erreur suppression:", error);
     }
@@ -65,49 +63,83 @@ function OffrePage() {
             </p>
           </div>
 
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button className="rounded-lg">
-                Add Offer +
-              </Button>
-            </DialogTrigger>
+          {offres.length > 0 && (
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button className="inline-flex items-center gap-2 rounded-2xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-blue-700 hover:shadow-md active:scale-[0.98]">
+                  <FaPlusCircle className="text-base" />
+                  Ajouter une offre
+                </Button>
+              </DialogTrigger>
 
-            <DialogContent className="max-w-2xl">
+              <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle>Ajouter une offre</DialogTitle>
+                </DialogHeader>
 
-              <OffersForm
-                onSuccess={(newOffre) => {
-                  setOffres((prev) => [newOffre, ...prev]);
-                  setOpen(false);
-                }}
-              />
-            </DialogContent>
-          </Dialog>
+                <OffersForm
+                  onSuccess={(newOffre) => {
+                    setOffres((prev) => [newOffre, ...prev]);
+                    setOpen(false);
+                  }}
+                />
+              </DialogContent>
+            </Dialog>
+          )}
         </div>
 
-        {loading && (
-          <p className="text-sm text-gray-600">Chargement des offres...</p>
-        )}
-
-        {error && (
-          <p className="text-sm text-red-500">{error}</p>
-        )}
-
         {!loading && !error && offres.length === 0 && (
-          <div className="rounded-2xl border bg-white p-8 text-center text-gray-600 shadow-sm">
-            Aucune offre trouvée.
+          <div className="rounded-3xl border border-gray-200 bg-white px-6 py-14 text-center shadow-sm">
+            <div className="mx-auto flex max-w-md flex-col items-center">
+              <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-blue-100">
+                <FaBriefcase className="text-3xl text-blue-600" />
+              </div>
+
+              <h3 className="mb-2 text-2xl font-bold text-gray-900">
+                Aucune offre trouvée
+              </h3>
+
+              <p className="mb-6 text-sm leading-6 text-gray-500">
+                Vous n'avez pas encore ajouté d'offre d'emploi. Cliquez sur le bouton
+                ci-dessous pour créer votre première offre et commencer à organiser
+                vos candidatures.
+              </p>
+
+              <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild>
+                  <Button className="inline-flex items-center gap-2 rounded-2xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-blue-700 hover:shadow-md active:scale-[0.98]">
+                    <FaPlusCircle className="text-base" />
+                    Ajouter une offre
+                  </Button>
+                </DialogTrigger>
+
+                <DialogContent className="max-w-2xl">
+                  <DialogHeader>
+                    <DialogTitle>Ajouter une offre</DialogTitle>
+                  </DialogHeader>
+
+                  <OffersForm
+                    onSuccess={(newOffre) => {
+                      setOffres((prev) => [newOffre, ...prev]);
+                      setOpen(false);
+                    }}
+                  />
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
         )}
 
         {!loading && !error && offres.length > 0 && (
-          <div className="space-y-4">
-            {offres.map((offre) => (
-              <OffreCard
-                key={offre._id}
-                offre={offre}
-                onDelete={handleDelete}
-              />
-            ))}
-          </div>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {offres.map((offre, index) => (
+                <OffreCard
+                  key={offre.id || offre._id || index}
+                  offre={offre}
+                  onDelete={handleDelete}
+                />
+              ))}
+</div>
         )}
       </div>
     </section>
