@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,7 +9,8 @@ import { HiOutlinePlus } from "react-icons/hi";
 import LanguageCard from "./LanguageCard";
 import LangueForm from "@/components/profilFormComponents/LanguageForm";
 
-function LanguageList({ languages = [], onSubmit, loading }) {
+function LanguageList({ languages = [], setLangues}) {
+  const [open, setOpen] = useState(false);
   return (
     <div className="space-y-5 mt-6">
 
@@ -19,16 +20,16 @@ function LanguageList({ languages = [], onSubmit, loading }) {
           Languages
         </h2>
 
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button size="sm" className="flex items-center gap-2 rounded-lg">
               <HiOutlinePlus size={16} />
-              Add
+              Add Langue
             </Button>
           </DialogTrigger>
 
           <DialogContent>
-            <LangueForm onSubmit={onSubmit} loading={loading} />
+            <LangueForm setLangues={setLangues} setOpen={setOpen} />
           </DialogContent>
         </Dialog>
       </div>
@@ -39,8 +40,7 @@ function LanguageList({ languages = [], onSubmit, loading }) {
           <LanguageCard
             key={lang.id}
             language={lang}
-            onSubmit={onSubmit}
-            loading={loading}
+            setLangues={setLangues}
           />
         ))}
       </div>

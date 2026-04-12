@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaLanguage } from "react-icons/fa";
 import axiosClient from "../../api/axios";
+import { RiLoader2Fill } from "react-icons/ri";
 
 const langueSchema = z.object({
   name: z.string().min(1, "La langue est requise"),
@@ -32,7 +33,8 @@ const levels = [
   "Langue maternelle",
 ];
 
-function LangueForm() {
+function LangueForm({ setLangues, setOpen }) {
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -47,28 +49,22 @@ function LangueForm() {
   });
 
   const onSubmit = async (data) => {
+    setLoading(true);
     try {
       const res = await axiosClient.post("/langues", data);
-      console.log("Langue saved:", res.data);
+      setLangues((prev) => [...prev, res.data]);
       reset();
+      setOpen(false);
     } catch (error) {
       console.error("Erreur:", error);
+    }finally {
+      setLoading(false);
     }
   };
 
   return (
-    <section className="w-full bg-gray-100 py-12">
-      <div className="max-w-3xl mx-auto px-4">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Gestion des Langues
-          </h1>
-          <p className="text-gray-600 text-lg">
-            Ajoutez les langues que vous maîtrisez.
-          </p>
-        </div>
 
-        <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm">
+        <div className="bg-white rounded-2xl py-10 px-2 ">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
               <FaLanguage className="text-blue-600 text-lg" />
@@ -124,18 +120,30 @@ function LangueForm() {
             </div>
 
             <div className="pt-2">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
-              >
-                {isSubmitting ? "Enregistrement..." : "Enregistrer"}
-              </button>
+              {loading 
+                ? (<button
+                    type="button"
+                    disabled
+                    className="flex items-center gap-2 bg-blue-600 text-white px-4 py-3 rounded-lg transition opacity-50 cursor-not-allowed"
+                  >
+                    Enregistrement
+                    <RiLoader2Fill className="animate-spin ml-2" />
+                  </button>
+                  ) : (
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+                  >
+                    Enregistrer
+                  </button>
+                  )
+                  }
             </div>
           </form>
         </div>
-      </div>
-    </section>
+
   );
 }
 
