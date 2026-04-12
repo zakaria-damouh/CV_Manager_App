@@ -29,7 +29,7 @@ function ProfileSection({userData , experiences, formations, competences, langue
     </div>
 
     <div className="bg-white rounded-2xl shadow-md p-6">
-      <CompetenceList competences={competences} setCompetences={setCompetences} />
+      <CompetenceList competences={competences} setUserCompetences={setCompetences} />
     </div>
 
     <div className="bg-white rounded-2xl shadow-md p-6">

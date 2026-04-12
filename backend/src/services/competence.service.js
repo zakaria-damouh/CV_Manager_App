@@ -1,10 +1,8 @@
 import prisma from "../config/db.js";
 
 
-export const getCompetencesService = async (userId) => {
-    const competences = await prisma.competence.findMany({
-        where: { userId }
-    });
+export const getCompetencesService = async () => {
+    const competences = await prisma.competence.findMany();
 
     return competences;
 }

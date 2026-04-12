@@ -9,8 +9,9 @@ import {
 import { HiOutlinePlus, HiOutlineSparkles } from "react-icons/hi";
 import CompetenceCard from "./CompetenceCard";
 import CompetenceForm from "@/components/profilFormComponents/Competence";
+import CompetenceSelector from "@/components/profilFormComponents/CompetenceSelector";
 
-function CompetenceList({ competences = [], onSubmit, loading }) {
+function CompetenceList({ competences = [], setUserCompetences }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -32,7 +33,7 @@ function CompetenceList({ competences = [], onSubmit, loading }) {
             </DialogTrigger>
 
             <DialogContent >
-              <CompetenceForm onSubmit={onSubmit} loading={loading} />
+              <CompetenceSelector setUserCompetences={setUserCompetences} setOpen={setOpen} />
             </DialogContent>
           </Dialog>
         )}
@@ -61,7 +62,7 @@ function CompetenceList({ competences = [], onSubmit, loading }) {
               </DialogTrigger>
 
               <DialogContent>
-                <CompetenceForm onSubmit={onSubmit} loading={loading} />
+                <CompetenceForm />
               </DialogContent>
             </Dialog>
           </CardContent>
@@ -78,8 +79,7 @@ function CompetenceList({ competences = [], onSubmit, loading }) {
             >
               <CompetenceCard
                 item={item}
-                onSubmit={onSubmit}
-                loading={loading}
+                setUserCompetences={setUserCompetences}
               />
             </div>
           ))}

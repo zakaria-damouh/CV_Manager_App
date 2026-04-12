@@ -3,7 +3,7 @@ import { createCompetenceService, deleteCompetenceService, getCompetenceByIdServ
 
 export const getCompetences = async (req, res) => {
     try {
-        const competences = await getCompetencesService(req.user.userId); 
+        const competences = await getCompetencesService(); 
         res.json(competences);
     } catch (error) {
         res.status(500).json({ error: error.message });
