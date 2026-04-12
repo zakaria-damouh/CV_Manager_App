@@ -51,7 +51,7 @@ function OffrePage() {
   }
 
   return (
-    <section className="w-full bg-gray-100 py-12">
+    <section className="w-full bg-gray-100 ">
       <div className="mx-auto max-w-full px-4">
         <div className="mb-8 flex items-center justify-between gap-4">
           <div>
@@ -73,10 +73,7 @@ function OffrePage() {
               </DialogTrigger>
 
               <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                  <DialogTitle>Ajouter une offre</DialogTitle>
-                </DialogHeader>
-
+            
                 <OffersForm
                   onSuccess={(newOffre) => {
                     setOffres((prev) => [newOffre, ...prev]);
@@ -114,9 +111,6 @@ function OffrePage() {
                 </DialogTrigger>
 
                 <DialogContent className="max-w-2xl">
-                  <DialogHeader>
-                    <DialogTitle>Ajouter une offre</DialogTitle>
-                  </DialogHeader>
 
                   <OffersForm
                     onSuccess={(newOffre) => {
