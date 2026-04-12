@@ -44,6 +44,7 @@ function ProfilePage() {
         formations={formations} 
         competences={competences} 
         langues={langues}
+        setUserData={setUserData}
         setExperiences={setExperiences}
         setFormations={setFormations}
         setCompetences={setCompetences}

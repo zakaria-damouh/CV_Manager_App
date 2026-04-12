@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -16,8 +16,10 @@ import {
   HiOutlinePhone,
 } from "react-icons/hi";
 import ProfileForm from "@/components/profilFormComponents/ProfileForm";
+import ProfileEditForm from "@/components/profilFormComponents/editForms/ProfileEditForm";
 
-function ProfileCard({ user, profile, loading }) {
+function ProfileCard({ user, setUserData, profile }) {
+  const [open, setOpen] = useState(false);
   if (!profile || !user) return null;
 
 
@@ -47,7 +49,7 @@ function ProfileCard({ user, profile, loading }) {
       </div>
 
       {/* Edit */}
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button variant="ghost" size="icon" className="rounded-full">
             <HiOutlinePencil size={18} className="text-gray-600" />
@@ -56,8 +58,10 @@ function ProfileCard({ user, profile, loading }) {
 
         <DialogContent className="!max-w-5xl">
           <DialogHeader />
-          <ProfileForm
-            initialData={profile}
+          <ProfileEditForm
+            profile={profile}
+            setUserData={setUserData}
+            setOpen={setOpen}
           />
         </DialogContent>
       </Dialog>

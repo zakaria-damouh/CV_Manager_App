@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaBriefcase } from "react-icons/fa";
-import axiosClient from "../../api/axios";
+import axiosClient from "../../../api/axios";
 import { RiLoader2Fill } from "react-icons/ri";
 
 const experienceSchema = z.object({

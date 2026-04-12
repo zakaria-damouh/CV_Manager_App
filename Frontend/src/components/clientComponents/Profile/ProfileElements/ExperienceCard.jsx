@@ -25,7 +25,7 @@ import {
   HiOutlineTrash,
 } from "react-icons/hi";
 import axiosClient from "@/api/axios";
-import EditExperienceForm from "@/components/profilFormComponents/EditExperienceForm";
+import EditExperienceForm from "@/components/profilFormComponents/editForms/EditExperienceForm";
 
 function ExperienceCard({ experience, setExperiences }) {
   if (!experience) return null;
