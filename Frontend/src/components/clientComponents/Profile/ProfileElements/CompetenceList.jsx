@@ -62,7 +62,7 @@ function CompetenceList({ competences = [], setUserCompetences }) {
               </DialogTrigger>
 
               <DialogContent>
-                <CompetenceForm />
+                <CompetenceSelector setUserCompetences={setUserCompetences} setOpen={setOpen} />
               </DialogContent>
             </Dialog>
           </CardContent>
