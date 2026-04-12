@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,7 +9,8 @@ import { HiOutlinePlus } from "react-icons/hi";
 import FormationCard from "./FormationCard";
 import FormationForm from "@/components/profilFormComponents/FormationForm";
 
-function FormationList({ formations = [], onSubmit, loading }) {
+function FormationList({ formations = [], setFormations }) {
+  const [open, setOpen] = useState(false);
   const sorted = [...formations].sort(
     (a, b) => new Date(b.startDate) - new Date(a.startDate)
   );
@@ -23,16 +24,16 @@ function FormationList({ formations = [], onSubmit, loading }) {
           Education
         </h2>
 
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button className="flex items-center gap-2 rounded-xl">
               <HiOutlinePlus size={18} />
-              Add
+              Add formation
             </Button>
           </DialogTrigger>
 
           <DialogContent className="!max-w-4xl">
-            <FormationForm onSubmit={onSubmit} loading={loading} />
+            <FormationForm setOpen={setOpen} setFormations={setFormations} />
           </DialogContent>
         </Dialog>
       </div>
@@ -49,8 +50,7 @@ function FormationList({ formations = [], onSubmit, loading }) {
             {/* Card */}
             <FormationCard
               formation={formation}
-              onSubmit={onSubmit}
-              loading={loading}
+              setFormations={setFormations}
             />
           </div>
         ))}

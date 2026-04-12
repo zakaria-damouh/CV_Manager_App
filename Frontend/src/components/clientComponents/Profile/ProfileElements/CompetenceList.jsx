@@ -1,17 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { HiOutlinePlus } from "react-icons/hi";
+import { HiOutlinePlus, HiOutlineSparkles } from "react-icons/hi";
 import CompetenceCard from "./CompetenceCard";
 import CompetenceForm from "@/components/profilFormComponents/Competence";
 
 function CompetenceList({ competences = [], onSubmit, loading }) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className="space-y-5 mt-6">
+    <div className="space-y-6 mt-6">
 
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -19,32 +22,69 @@ function CompetenceList({ competences = [], onSubmit, loading }) {
           Skills
         </h2>
 
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button size="sm" className="flex items-center gap-2 rounded-lg">
-              <HiOutlinePlus size={16} />
-              Add
-            </Button>
-          </DialogTrigger>
+        {competences.length > 0 && (
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button size="sm" className="flex items-center gap-2 rounded-lg">
+                <HiOutlinePlus size={16} />
+                Add Skills
+              </Button>
+            </DialogTrigger>
 
-          <DialogContent>
-            <CompetenceForm onSubmit={onSubmit} loading={loading} />
-          </DialogContent>
-        </Dialog>
+            <DialogContent >
+              <CompetenceForm onSubmit={onSubmit} loading={loading} />
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
 
-      {/* Skills Cloud */}
-      <div className="flex flex-wrap gap-3">
-        {competences.map((item) => (
-          <div key={item.competenceId} className="w-full sm:w-[48%] lg:w-[32%]">
-            <CompetenceCard
-              item={item}
-              onSubmit={onSubmit}
-              loading={loading}
-            />
-          </div>
-        ))}
-      </div>
+      {/* Empty State */}
+      {competences.length === 0 && (
+        <Card className="border-dashed border-2 border-gray-200 rounded-2xl">
+          <CardContent className="p-10 flex flex-col items-center justify-center text-center">
+            <HiOutlineSparkles size={40} className="text-gray-400 mb-3" />
+
+            <h3 className="text-lg font-semibold text-gray-700">
+              No skills yet
+            </h3>
+
+            <p className="text-gray-500 text-sm mt-1 mb-4">
+              Add your skills to highlight your strengths.
+            </p>
+
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button className="rounded-xl flex items-center gap-2">
+                  <HiOutlinePlus size={18} />
+                  Add your first skill
+                </Button>
+              </DialogTrigger>
+
+              <DialogContent>
+                <CompetenceForm onSubmit={onSubmit} loading={loading} />
+              </DialogContent>
+            </Dialog>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Skills List */}
+      {competences.length > 0 && (
+        <div className="flex flex-wrap gap-3">
+          {competences.map((item) => (
+            <div
+              key={item.competenceId}
+              className="w-full sm:w-[48%] lg:w-[32%]"
+            >
+              <CompetenceCard
+                item={item}
+                onSubmit={onSubmit}
+                loading={loading}
+              />
+            </div>
+          ))}
+        </div>
+      )}
 
     </div>
   );

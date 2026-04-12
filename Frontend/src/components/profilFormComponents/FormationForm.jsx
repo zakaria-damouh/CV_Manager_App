@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaGraduationCap } from "react-icons/fa";
 import axiosClient from "../../api/axios";
+import { RiLoader2Fill } from "react-icons/ri";
 
 const formationSchema = z.object({
   institution: z
@@ -32,7 +33,8 @@ const formationSchema = z.object({
     .max(1000, "La description est trop longue"),
 });
 
-function FormationForm() {
+function FormationForm({ setOpen, setFormations}) {
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -51,6 +53,7 @@ function FormationForm() {
   });
 
   const onSubmit = async (data) => {
+    setLoading(true);
     try {
       const formattedData = {
         ...data,
@@ -59,24 +62,18 @@ function FormationForm() {
       };
 
       const res = await axiosClient.post("/formations", formattedData);
-      console.log("Formation saved:", res.data);
+      setFormations((prev) => [...prev, res.data.formation]);
       reset();
+      setOpen(false);
     } catch (error) {
       console.error("Erreur:", error);
+    }finally {
+      setLoading(false);
     }
   };
 
   return (
-    <section className="w-full bg-gray-100 py-12">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Gestion des Formations
-          </h1>
-          <p className="text-gray-600 text-lg">
-            Ajoutez vos formations académiques pour compléter votre profil.
-          </p>
-        </div>
+
 
         <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm">
           <div className="flex items-center gap-3 mb-8">
@@ -192,18 +189,28 @@ function FormationForm() {
             </div>
 
             <div className="pt-2">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
-              >
-                {isSubmitting ? "Enregistrement..." : "Enregistrer"}
-              </button>
+              {loading ? (
+                <button
+                  type="button"
+                  disabled={true}
+                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+                >
+                  Enregistrement
+                  <RiLoader2Fill className="animate-spin ml-2" />
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+                >
+                  Enregistrer
+                </button>
+              )}
             </div>
           </form>
         </div>
-      </div>
-    </section>
+
   );
 }
 

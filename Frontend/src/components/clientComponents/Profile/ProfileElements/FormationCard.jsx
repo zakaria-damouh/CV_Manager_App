@@ -1,21 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   HiOutlineAcademicCap,
   HiOutlineCalendar,
   HiOutlinePencil,
+  HiOutlineTrash,
 } from "react-icons/hi";
+import axiosClient from "@/api/axios";
 import FormationForm from "@/components/profilFormComponents/FormationForm";
+import FormationEditForm from "@/components/profilFormComponents/editForms/FormationEditForm";
 
-function FormationCard({ formation, onSubmit, loading }) {
+function FormationCard({ formation, setFormations }) {
   if (!formation) return null;
+
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const formatDate = (date) =>
     new Date(date).toLocaleDateString(undefined, {
@@ -23,9 +39,22 @@ function FormationCard({ formation, onSubmit, loading }) {
       month: "short",
     });
 
+  const handleDelete = async () => {
+    setLoading(true);
+    try {
+      await axiosClient.delete(`/formations/${formation.id}`);
+      setFormations((prev) =>
+        prev.filter((f) => f.id !== formation.id)
+      );
+    } catch (error) {
+      console.error("Erreur lors de la suppression:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Card className="rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition">
-
       <CardContent className="p-6 flex flex-col h-full">
 
         {/* HEADER */}
@@ -47,22 +76,66 @@ function FormationCard({ formation, onSubmit, loading }) {
             </div>
           </div>
 
-          {/* Edit */}
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <HiOutlinePencil size={18} />
-              </Button>
-            </DialogTrigger>
+          {/* ✏️ Edit + 🗑️ Delete */}
+          <div className="flex items-center gap-2">
 
-            <DialogContent className="!max-w-4xl">
-              <FormationForm
-                initialData={formation}
-                onSubmit={onSubmit}
-                loading={loading}
-              />
-            </DialogContent>
-          </Dialog>
+            {/* Edit */}
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <HiOutlinePencil size={18} />
+                </Button>
+              </DialogTrigger>
+
+              <DialogContent className="!max-w-4xl">
+                <FormationEditForm
+                  formation={formation}
+                  setFormations={setFormations}
+                  setOpen={setOpen}
+                />
+              </DialogContent>
+            </Dialog>
+
+            {/* Delete */}
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="hover:bg-red-100"
+                >
+                  <HiOutlineTrash size={18} className="text-red-600" />
+                </Button>
+              </AlertDialogTrigger>
+
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Delete formation?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    this formation from your profile.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+
+                <AlertDialogFooter>
+                  <AlertDialogCancel disabled={loading}>
+                    Cancel
+                  </AlertDialogCancel>
+
+                  <AlertDialogAction
+                    onClick={handleDelete}
+                    disabled={loading}
+                    className="bg-red-600 hover:bg-red-700"
+                  >
+                    {loading ? "Deleting..." : "Delete"}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
+          </div>
         </div>
 
         {/* DATES */}
