@@ -8,7 +8,7 @@ import CompetenceList from "./ProfileElements/CompetenceList";
 import { FaUser } from "react-icons/fa";
 
 
-function ProfileSection({userData}) {
+function ProfileSection({userData , experiences, formations, competences, langues , setExperiences, setFormations, setCompetences, setLangues}) {
    
   return (
 <div className="min-h-screen  py-10 px-4">
@@ -28,19 +28,19 @@ function ProfileSection({userData}) {
     </div>
 
     <div className="bg-white rounded-2xl shadow-md p-6">
-      <CompetenceList competences={userData?.userCompetences} />
+      <CompetenceList competences={competences} setCompetences={setCompetences} />
     </div>
 
     <div className="bg-white rounded-2xl shadow-md p-6">
-      <ExperienceList experiences={userData?.experiences} />
+      <ExperienceList experiences={experiences} setExperiences={setExperiences} />
     </div>
 
     <div className="bg-white rounded-2xl shadow-md p-6">
-      <FormationList formations={userData?.formations} />
+      <FormationList formations={formations} setFormations={setFormations} />
     </div>
 
     <div className="bg-white rounded-2xl shadow-md p-6">
-      <LanguageList languages={userData?.langues} />
+      <LanguageList languages={langues} setLangues={setLangues} />
     </div>
 
   </div>

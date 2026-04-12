@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -12,10 +12,9 @@ import ExperienceForm from "@/components/profilFormComponents/ExperienceForm";
 
 function ExperienceList({
   experiences = [],
-  onSubmitExperience,
-  loading,
+  setExperiences,
 }) {
-  // sort by order (important 🔥)
+  const [open, setOpen] = useState(false);
   const sortedExperiences = [...experiences].sort(
     (a, b) => a.order - b.order
   );
@@ -33,21 +32,23 @@ function ExperienceList({
         </div>
 
         {/* Add Experience */}
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="rounded-xl flex items-center gap-2">
-              <HiOutlinePlus size={18} />
-              Add Experience
-            </Button>
-          </DialogTrigger>
+        {sortedExperiences.length > 0 &&
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button className="rounded-xl flex items-center gap-2">
+                <HiOutlinePlus size={18} />
+                Add Experience
+              </Button>
+            </DialogTrigger>
 
-          <DialogContent className="!max-w-4xl">
-            <ExperienceForm
-              onSubmit={onSubmitExperience}
-              loading={loading}
-            />
-          </DialogContent>
-        </Dialog>
+            <DialogContent className="!max-w-4xl">
+              <ExperienceForm
+                setExperiences={setExperiences}
+                setOpen={setOpen}
+              />
+            </DialogContent>
+          </Dialog>
+        }
       </div>
 
       {/* Empty State */}
@@ -74,8 +75,8 @@ function ExperienceList({
 
               <DialogContent className="!max-w-4xl">
                 <ExperienceForm
-                  onSubmit={onSubmitExperience}
-                  loading={loading}
+                  setExperiences={setExperiences}
+                  setOpen={setOpen}
                 />
               </DialogContent>
             </Dialog>
@@ -92,8 +93,7 @@ function ExperienceList({
         >
         <ExperienceCard
             experience={exp}
-            onSubmit={onSubmitExperience}
-            loading={loading}
+            setExperiences={setExperiences}
         />
         </div>
     ))}

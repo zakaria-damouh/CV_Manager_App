@@ -6,6 +6,10 @@ import { useEffect, useState } from "react";
 
 function ProfilePage() {
    const [userData, setUserData] = useState(null);
+   const [experiences, setExperiences] = useState([]);
+   const [formations, setFormations] = useState([]);
+   const [competences, setCompetences] = useState([]);
+   const [langues, setLangues] = useState([]);
    const [loading, setLoading] = useState(false);
 
     const fetchProfileData = async () => {
@@ -14,6 +18,10 @@ function ProfilePage() {
         try {
             const res = await axiosClient.get("/profile/user");
             setUserData(res.data);
+                setExperiences(res.data.experiences || []);
+                setFormations(res.data.formations || []);
+                setCompetences(res.data.userCompetences || []);
+                setLangues(res.data.langues || []);
         } catch (error) {
             console.error("Erreur:", error);
         }finally {
@@ -31,9 +39,18 @@ function ProfilePage() {
   return (
     <>
     {userData?.profile ?
-     <ProfileSection userData={userData} />
+     <ProfileSection userData={userData} 
+        experiences={experiences} 
+        formations={formations} 
+        competences={competences} 
+        langues={langues}
+        setExperiences={setExperiences}
+        setFormations={setFormations}
+        setCompetences={setCompetences}
+        setLangues={setLangues}
+        />
      :
-     <ProfileForm userData={userData} />
+     <ProfileForm  />
     }
 
     </>

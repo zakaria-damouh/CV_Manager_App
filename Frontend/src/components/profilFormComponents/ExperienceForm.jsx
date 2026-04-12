@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaBriefcase } from "react-icons/fa";
 import axiosClient from "../../api/axios";
+import { RiLoader2Fill } from "react-icons/ri";
 
 const experienceSchema = z.object({
   position: z
@@ -32,7 +33,8 @@ const experienceSchema = z.object({
     .min(1, "L'ordre doit être supérieur ou égal à 1"),
 });
 
-function ExperienceForm() {
+function ExperienceForm({ setOpen ,setExperiences }) {
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -51,6 +53,7 @@ function ExperienceForm() {
   });
 
   const onSubmit = async (data) => {
+    setLoading(true);
     try {
        const formattedData = {
       ...data,
@@ -58,24 +61,18 @@ function ExperienceForm() {
       endDate: new Date(data.endDate).toISOString(),
     };
       const res = await axiosClient.post("/experiences", formattedData);
-      console.log("Experience saved:", res.data);
+      setExperiences((prev) => [...prev, res.data.experience]);
       reset();
+      setOpen(false);
     } catch (error) {
       console.error("Erreur:", error);
+    }finally {
+      setLoading(false);
     }
   };
 
   return (
-    <section className="w-full bg-gray-100 py-12">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Gestion des Expériences
-          </h1>
-          <p className="text-gray-600 text-lg">
-            Ajoutez vos expériences professionnelles pour enrichir votre profil.
-          </p>
-        </div>
+      
 
         <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm">
           <div className="flex items-center gap-3 mb-8">
@@ -192,18 +189,27 @@ function ExperienceForm() {
             </div>
 
             <div className="pt-2">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+              {loading ? (
+                  <button
+                    disabled
+                    className="flex items-center gap-2 bg-blue-600 text-white px-4 py-3 rounded-lg opacity-50 cursor-not-allowed"
+                  >
+                    Enregistrement
+                    <RiLoader2Fill className="animate-spin mr-2" size={18} />
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
               >
                 {isSubmitting ? "Enregistrement..." : "Enregistrer"}
               </button>
+                )
+              }
             </div>
           </form>
         </div>
-      </div>
-    </section>
   );
 }
 
