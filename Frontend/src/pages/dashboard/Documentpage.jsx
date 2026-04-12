@@ -1,10 +1,12 @@
+import DocumentList from "@/components/clientComponents/Doc/DocList";
 import DocumentForm from "@/components/profilFormComponents/DocumentForm";
 
 
 function DocumentPage() {
   return (
     <div>
-     <DocumentForm />
+      <DocumentList />
+     {/* <DocumentForm /> */}
     </div>
   );
 }   
