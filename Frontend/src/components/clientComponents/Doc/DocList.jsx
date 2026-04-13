@@ -3,35 +3,10 @@ import { useEffect, useState } from "react";
 import DocumentCard from "./DocumentCard";
 import { RiLoader2Fill } from "react-icons/ri";
 
-function DocumentList() {
-  const [documents, setDocuments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+function DocumentList({ documents, setDocuments ,loading , error}) {
 
-  const fetchDocuments = async () => {
-    try {
-      const res = await axiosClient.get("/documents");
-      setDocuments(res.data);
-    } catch (error) {
-      setError("Failed to fetch documents.");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    fetchDocuments();
-  }, []);
 
-  // ✅ View handler
-  const handleView = (doc) => {
-    console.log("View document:", doc);
-
-    // 👉 later you can open modal here
-  };
-
-  // ✅ Delete handler
   const handleDelete = async (doc) => {
     try {
       await axiosClient.delete(`/documents/${doc.id}`);
@@ -78,7 +53,6 @@ function DocumentList() {
         <DocumentCard
           key={doc.id}
           doc={doc}
-          onView={handleView}
           onDelete={handleDelete}
         />
       ))}

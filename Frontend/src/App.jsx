@@ -13,7 +13,8 @@ import LoginPage from './pages/LoginPage'
 
 import ProfilePage from './pages/dashboard/Profilepage'
 import OffersPage from "./pages/dashboard/JobOffersPage";
-import DocumentPage from "./pages/dashboard/Documentpage";
+import DocumentPage from "./pages/dashboard/DocumentPage";
+import DocumentDetailsPage from "./pages/dashboard/DocumentDetailsPage";
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           <Route path='profile' element={<ProfilePage />} />
           <Route path="offers" element={<OffersPage />} />
           <Route path="documents" element={<DocumentPage />} />
+          <Route path="documents/:id" element={<DocumentDetailsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

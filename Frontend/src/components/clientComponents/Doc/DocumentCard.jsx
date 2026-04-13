@@ -20,8 +20,9 @@ import {
   HiOutlineTrash,
   HiOutlineEye,
 } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 
-function DocumentCard({ doc, onView, onDelete }) {
+function DocumentCard({ doc, onDelete }) {
   if (!doc) return null;
 
   const { type, aiModelUsed, createdAt } = doc;
@@ -32,6 +33,12 @@ function DocumentCard({ doc, onView, onDelete }) {
       month: "short",
       day: "numeric",
     });
+
+  const navigate = useNavigate();
+
+    const handleView = () => {
+        navigate(`/dashboard/documents/${doc.id}`);
+    }
 
   return (
     <div className="flex items-center justify-between p-4 rounded-xl border bg-white hover:shadow-sm transition">
@@ -48,16 +55,16 @@ function DocumentCard({ doc, onView, onDelete }) {
             {type}
           </p>
 
-          <div className="flex items-center gap-2 mt-1">
             <Badge variant="outline">
               {aiModelUsed}
             </Badge>
 
-            <div className="flex items-center gap-1 text-xs text-gray-500">
-              <HiOutlineClock size={14} />
-              <span>{formatDate(createdAt)}</span>
+            <div className="flex items-center gap-1 pt-2">
+              <HiOutlineClock size={14} className="text-gray-500" />
+              <span className="text-xs text-gray-500 ml-1">
+                {formatDate(createdAt)}
+              </span>
             </div>
-          </div>
         </div>
       </div>
 
@@ -69,7 +76,7 @@ function DocumentCard({ doc, onView, onDelete }) {
         className={"cursor-pointer"}
           size="icon"
           variant="secondary"
-          onClick={() => onView?.(doc)}
+          onClick={handleView}
         >
           <HiOutlineEye size={18} />
         </Button>
