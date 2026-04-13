@@ -54,20 +54,21 @@ function OffrePage() {
     <section className="w-full bg-gray-100 ">
       <div className="mx-auto max-w-full px-4">
         <div className="mb-8 flex items-center justify-between gap-4">
-          <div>
-            <h1 className="mb-2 text-4xl font-bold text-gray-900">
-              Gestion des Offres d'emploi
-            </h1>
-            <p className="text-lg text-gray-600">
-              Consultez et ajoutez vos offres d'emploi.
-            </p>
-          </div>
+            <div className="flex items-center gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100">
+                  <FaBriefcase className="text-xl text-blue-600" />
+                </div>
+                  <h2 className="text-2xl font-semibold text-gray-900">
+                    Offres d'emploi
+                  </h2>
+            </div>
+
 
           {offres.length > 0 && (
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
-                <Button className="inline-flex items-center gap-2 rounded-2xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-blue-700 hover:shadow-md active:scale-[0.98]">
-                  <FaPlusCircle className="text-base" />
+                <Button className="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-black">
+                  <FaPlusCircle className="text-xs" />
                   Ajouter une offre
                 </Button>
               </DialogTrigger>
